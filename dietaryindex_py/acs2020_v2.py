@@ -1,7 +1,6 @@
 """ACS2020 Version 2 scoring without external dependencies."""
 
 from typing import Iterable, List, Dict, Any
-import statistics
 
 try:
     import pandas as pd
@@ -9,22 +8,12 @@ try:
 except Exception:  # pragma: no cover - pandas may not be installed
     HAVE_PANDAS = False
 
-from .acs2020 import _quantiles, _score_value, _ssb_score
+from .acs2020 import _quantiles, _score_value, _ssb_score, _apply_quintile
 
-
-def _apply_quintile(rows: List[Dict[str, Any]], group_key: str, value_key: str, out_key: str,
-                    ascending: bool, scores: List[float]) -> None:
-    groups: Dict[Any, List[int]] = {}
-    for idx, row in enumerate(rows):
-        groups.setdefault(row[group_key], []).append(idx)
-    for indices in groups.values():
-        vals = [rows[i][value_key] for i in indices]
-        q1, q2, q3 = _quantiles(vals)
-        for i in indices:
-            rows[i][out_key] = float(_score_value(rows[i][value_key], q1, q2, q3, ascending, scores))
 
 
 def _acs2020_v2_rows(data: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Return result rows for the ACS2020 Version 2 score."""
     rows = [dict(r) for r in data]
     required = [
         "RESPONDENTID",
@@ -77,7 +66,18 @@ def _acs2020_v2_rows(data: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
 
 
 def acs2020_v2(data: Any):
-    """Compute the ACS2020 Version 2 index (servings per kcal)."""
+    """Compute the ACS2020 Version 2 index (servings per kcal).
+
+    Parameters
+    ----------
+    data : pandas.DataFrame or Iterable[dict]
+        Input data with the required columns.
+
+    Returns
+    -------
+    same type as *data*
+        Data augmented with scoring columns.
+    """
     if HAVE_PANDAS and isinstance(data, pd.DataFrame):
         rows = _acs2020_v2_rows(data.to_dict("records"))
         return pd.DataFrame(rows)

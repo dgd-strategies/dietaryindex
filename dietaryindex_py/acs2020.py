@@ -1,4 +1,10 @@
-"""Pure Python implementation of ACS2020 scoring."""
+"""Pure Python implementation of ACS2020 scoring.
+
+This module contains lightweight utilities mirroring the original R functions.
+It provides :func:`acs2020_v1` and :func:`acs2020_v2` for computing the
+corresponding ACS2020 dietary indexes using only the Python standard library.
+Optional pandas support allows these functions to accept and return DataFrames.
+"""
 
 from typing import Iterable, List, Dict, Any
 import statistics
@@ -22,28 +28,28 @@ def _quantiles(values: List[float]) -> List[float]:
 
 
 def _score_value(val: float, q1: float, q2: float, q3: float, ascending: bool, scores: List[float]) -> float:
+    """Return the score for *val* relative to the provided quartiles."""
     if ascending:
         if val <= q1:
             return scores[0]
-        elif val <= q2:
+        if val <= q2:
             return scores[1]
-        elif val <= q3:
+        if val <= q3:
             return scores[2]
-        else:
-            return scores[3]
+        return scores[3]
     else:
         if val <= q3:
             return scores[3]
-        elif val <= q2:
+        if val <= q2:
             return scores[2]
-        elif val <= q1:
+        if val <= q1:
             return scores[1]
-        else:
-            return scores[0]
+        return scores[0]
 
 
 def _apply_quintile(rows: List[Dict[str, Any]], group_key: str, value_key: str, out_key: str,
                     ascending: bool, scores: List[float]) -> None:
+    """Assign *out_key* scores per quintile of *value_key* within *group_key*."""
     groups: Dict[Any, List[int]] = {}
     for idx, row in enumerate(rows):
         groups.setdefault(row[group_key], []).append(idx)
@@ -55,6 +61,7 @@ def _apply_quintile(rows: List[Dict[str, Any]], group_key: str, value_key: str, 
 
 
 def _ssb_score(val: float) -> float:
+    """Score sugar-sweetened beverage consumption."""
     if val <= 0:
         return 1.5
     if val < 0.428:
@@ -65,6 +72,7 @@ def _ssb_score(val: float) -> float:
 
 
 def _acs2020_v1_rows(data: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Return a list of result rows for the ACS2020 Version 1 score."""
     rows = [dict(row) for row in data]
     required = [
         "RESPONDENTID",
@@ -110,8 +118,15 @@ def _acs2020_v1_rows(data: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
 def acs2020_v1(data: Any):
     """Compute the ACS2020 Version 1 index.
 
-    Accepts either a pandas DataFrame or an iterable of dictionaries and returns
-    the same type with additional score columns.
+    Parameters
+    ----------
+    data : pandas.DataFrame or Iterable[dict]
+        Input data with the required columns.
+
+    Returns
+    -------
+    same type as *data*
+        Data augmented with scoring columns.
     """
     if HAVE_PANDAS and isinstance(data, pd.DataFrame):
         rows = _acs2020_v1_rows(data.to_dict("records"))

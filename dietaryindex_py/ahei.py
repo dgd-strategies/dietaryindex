@@ -1,7 +1,6 @@
-"""Alternative Healthy Eating Index implemented with only the Python standard library."""
+"""Pure Python implementation of the Alternative Healthy Eating Index."""
 
 from typing import Iterable, List, Dict, Any
-import statistics
 
 try:
     import pandas as pd
@@ -11,6 +10,7 @@ except Exception:  # pragma: no cover - pandas may not be installed
 
 
 def _score_linear(val: float, min_serv: float, max_serv: float, min_score: float, max_score: float) -> float:
+    """Linearly interpolate scores between ``min_serv`` and ``max_serv``."""
     if val >= max_serv:
         return max_score
     if val <= min_serv:
@@ -19,6 +19,7 @@ def _score_linear(val: float, min_serv: float, max_serv: float, min_score: float
 
 
 def _quantiles_list(values: List[float], probs: List[float]) -> List[float]:
+    """Return quantiles corresponding to ``probs`` using linear interpolation."""
     sorted_vals = sorted(values)
     n = len(sorted_vals)
     result = []
@@ -35,6 +36,7 @@ def _quantiles_list(values: List[float], probs: List[float]) -> List[float]:
 
 
 def _ahei_rows(data: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Return a list of result rows for the AHEI score."""
     rows = [dict(r) for r in data]
     required = [
         "RESPONDENTID",
@@ -129,7 +131,18 @@ def _ahei_rows(data: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
 
 
 def ahei(data: Any):
-    """Compute the AHEI for a pandas DataFrame or iterable of dictionaries."""
+    """Compute the Alternative Healthy Eating Index.
+
+    Parameters
+    ----------
+    data : pandas.DataFrame or Iterable[dict]
+        Input data with the required columns.
+
+    Returns
+    -------
+    same type as *data*
+        Data augmented with scoring columns.
+    """
     if HAVE_PANDAS and isinstance(data, pd.DataFrame):
         rows = _ahei_rows(data.to_dict("records"))
         return pd.DataFrame(rows)
