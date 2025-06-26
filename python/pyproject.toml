@@ -9,6 +9,6 @@ description = "Python implementation of dietaryindex algorithms"
 authors = [{name="Jiada James Zhan", email="jzha832@emory.edu"}]
 license = {text="MIT"}
 requires-python = ">=3.8"
-dependencies = ["pandas"]
+dependencies = ["pandas", "flask"]
 [project.optional-dependencies]
 dev = ["pytest"]

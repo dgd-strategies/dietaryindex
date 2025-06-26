@@ -132,6 +132,16 @@ To run the Python tests from a local checkout without installing the package, us
 PYTHONPATH=python pytest -q
 ```
 
+### Web interface
+An experimental Flask web app allows non-programmers to compute dietary scores
+through a simple browser interface. Run it with:
+
+```bash
+FLASK_APP=python/dietaryindex_py/webapp.py flask run
+```
+
+Upload a CSV file and select the score type to receive a scored CSV download.
+
 
 ## Getting Started
 ___
