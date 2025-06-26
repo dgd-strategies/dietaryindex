@@ -30,3 +30,21 @@ def test_acs2020_basic():
         "ACS2020_HPFRG_RATIO",
     ]].sum(axis=1)
     assert all(abs(result["ACS2020_V1_ALL"] - comp_sum) < 1e-6)
+
+
+def test_ssb_boundary():
+    df = pd.DataFrame({
+        "RESPONDENTID": [1],
+        "GENDER": [1],
+        "VEG_SERV_ACS2020": [1],
+        "VEG_ITEMS_SERV_ACS2020": [1],
+        "FRT_SERV_ACS2020": [1],
+        "FRT_ITEMS_SERV_ACS2020": [1],
+        "WGRAIN_SERV_ACS2020": [1],
+        "REDPROC_MEAT_SERV_ACS2020": [1],
+        "HPFRG_RATIO_SERV_ACS2020": [1],
+        "SSB_FRTJ_SERV_ACS2020": [0.428],
+    })
+
+    out = acs2020_v1(df)
+    assert out.loc[0, "ACS2020_SSB_FRTJ"] == 0.5

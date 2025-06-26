@@ -86,6 +86,7 @@ def acs2020_v1(df: pd.DataFrame) -> pd.DataFrame:
         bins=[-float("inf"), 0, 0.428, 1, float("inf")],
         labels=[1.5, 1, 0.5, 0],
         include_lowest=True,
+        right=False,
     ).astype(float)
 
     comp_cols = [
