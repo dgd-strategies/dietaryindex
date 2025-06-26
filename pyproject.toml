@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dietaryindex-py"
+version = "0.1.0"
+description = "Python implementation of dietaryindex algorithms"
+authors = [{name="Jiada James Zhan", email="jzha832@emory.edu"}]
+license = {text="MIT"}
+requires-python = ">=3.8"
+dependencies = ["pandas"]
+[project.optional-dependencies]
+dev = ["pytest"]

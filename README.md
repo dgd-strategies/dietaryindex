@@ -111,18 +111,23 @@ library(devtools) # Load devtools
 install_github("jamesjiadazhan/dietaryindex")
 ```
 
+### Python usage
+A growing Python reimplementation is included alongside the R package. Install it in editable mode and import the scoring functions:
 
-If something happens like the following, first try to enter 1 in the terminal (lower box). If not successful, then try to enter 2. **It will take a while if you are a new R user.**
+```bash
+pip install -e .
 ```
-  These packages have more recent versions available.
-  It is recommended to update all of them.
-  Which would you like to update?
 
-  1: All                          
-  2: CRAN packages only           
-  3: None                         
-  4: tzdb  (0.3.0 -> 0.4.0) [CRAN]
-  5: vroom (1.6.1 -> 1.6.3) [CRAN]
+```python
+from dietaryindex_py import acs2020_v1, acs2020_v2, ahei
+```
+
+A Python-focused development container is provided under the `.devcontainer` directory for a ready-to-use environment. The container installs required dependencies and the package itself in editable mode and includes `pytest` for testing. After opening the project inside the dev container you can run the tests directly with `pytest`.
+
+To run the Python tests from a local checkout without installing the package, use:
+
+```bash
+PYTHONPATH=. pytest -q
 ```
 
 

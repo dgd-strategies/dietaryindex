@@ -1,0 +1,12 @@
+{
+    "name": "dietaryindex",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "postCreateCommand": "pip install -r requirements.txt && pip install -e .",
+    "extensions": ["ms-python.python"],
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+    }
+}
