@@ -131,6 +131,7 @@ To run the Python tests from a local checkout without installing the package, us
 ```bash
 PYTHONPATH=python pytest -q
 ```
+```
 
 ### Web interface
 An experimental Flask web app allows non-programmers to compute dietary scores
