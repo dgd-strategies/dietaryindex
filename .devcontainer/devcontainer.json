@@ -1,0 +1,11 @@
+{
+    "name": "dietaryindex",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "context": ".."
+    },
+    "extensions": ["ms-python.python", "REditorSupport.r"],
+    "settings": {
+        "terminal.integrated.shell.linux": "/bin/bash"
+    }
+}
