@@ -11,6 +11,7 @@ import statistics
 
 try:
     import pandas as pd
+
     HAVE_PANDAS = True
 except Exception:  # pragma: no cover - pandas may not be installed
     HAVE_PANDAS = False
@@ -27,7 +28,9 @@ def _quantiles(values: List[float]) -> List[float]:
     return statistics.quantiles(sorted_vals, n=4)
 
 
-def _score_value(val: float, q1: float, q2: float, q3: float, ascending: bool, scores: List[float]) -> float:
+def _score_value(
+    val: float, q1: float, q2: float, q3: float, ascending: bool, scores: List[float]
+) -> float:
     """Return the score for *val* relative to the provided quartiles."""
     if ascending:
         if val <= q1:
@@ -47,8 +50,14 @@ def _score_value(val: float, q1: float, q2: float, q3: float, ascending: bool, s
         return scores[0]
 
 
-def _apply_quintile(rows: List[Dict[str, Any]], group_key: str, value_key: str, out_key: str,
-                    ascending: bool, scores: List[float]) -> None:
+def _apply_quintile(
+    rows: List[Dict[str, Any]],
+    group_key: str,
+    value_key: str,
+    out_key: str,
+    ascending: bool,
+    scores: List[float],
+) -> None:
     """Assign *out_key* scores per quintile of *value_key* within *group_key*."""
     groups: Dict[Any, List[int]] = {}
     for idx, row in enumerate(rows):
@@ -57,7 +66,9 @@ def _apply_quintile(rows: List[Dict[str, Any]], group_key: str, value_key: str, 
         vals = [rows[i][value_key] for i in indices]
         q1, q2, q3 = _quantiles(vals)
         for i in indices:
-            rows[i][out_key] = float(_score_value(rows[i][value_key], q1, q2, q3, ascending, scores))
+            rows[i][out_key] = float(
+                _score_value(rows[i][value_key], q1, q2, q3, ascending, scores)
+            )
 
 
 def _ssb_score(val: float) -> float:
@@ -91,13 +102,47 @@ def _acs2020_v1_rows(data: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
             if c not in r:
                 raise KeyError(f"Missing required column: {c}")
 
-    _apply_quintile(rows, "GENDER", "VEG_SERV_ACS2020", "ACS2020_VEG", True, [0, 0.25, 0.5, 0.75])
-    _apply_quintile(rows, "GENDER", "VEG_ITEMS_SERV_ACS2020", "ACS2020_VEG_ITEMS", True, [0, 0.25, 0.5, 0.75])
-    _apply_quintile(rows, "GENDER", "FRT_SERV_ACS2020", "ACS2020_FRT", True, [0, 0.25, 0.5, 0.75])
-    _apply_quintile(rows, "GENDER", "FRT_ITEMS_SERV_ACS2020", "ACS2020_FRT_ITEMS", True, [0, 0.25, 0.5, 0.75])
-    _apply_quintile(rows, "GENDER", "WGRAIN_SERV_ACS2020", "ACS2020_WGRAIN", True, [0, 1, 2, 3])
-    _apply_quintile(rows, "GENDER", "REDPROC_MEAT_SERV_ACS2020", "ACS2020_REDPROC_MEAT", False, [3, 2, 1, 0])
-    _apply_quintile(rows, "GENDER", "HPFRG_RATIO_SERV_ACS2020", "ACS2020_HPFRG_RATIO", False, [1.5, 1.0, 0.5, 0.0])
+    _apply_quintile(
+        rows, "GENDER", "VEG_SERV_ACS2020", "ACS2020_VEG", True, [0, 0.25, 0.5, 0.75]
+    )
+    _apply_quintile(
+        rows,
+        "GENDER",
+        "VEG_ITEMS_SERV_ACS2020",
+        "ACS2020_VEG_ITEMS",
+        True,
+        [0, 0.25, 0.5, 0.75],
+    )
+    _apply_quintile(
+        rows, "GENDER", "FRT_SERV_ACS2020", "ACS2020_FRT", True, [0, 0.25, 0.5, 0.75]
+    )
+    _apply_quintile(
+        rows,
+        "GENDER",
+        "FRT_ITEMS_SERV_ACS2020",
+        "ACS2020_FRT_ITEMS",
+        True,
+        [0, 0.25, 0.5, 0.75],
+    )
+    _apply_quintile(
+        rows, "GENDER", "WGRAIN_SERV_ACS2020", "ACS2020_WGRAIN", True, [0, 1, 2, 3]
+    )
+    _apply_quintile(
+        rows,
+        "GENDER",
+        "REDPROC_MEAT_SERV_ACS2020",
+        "ACS2020_REDPROC_MEAT",
+        False,
+        [3, 2, 1, 0],
+    )
+    _apply_quintile(
+        rows,
+        "GENDER",
+        "HPFRG_RATIO_SERV_ACS2020",
+        "ACS2020_HPFRG_RATIO",
+        False,
+        [1.5, 1.0, 0.5, 0.0],
+    )
 
     for row in rows:
         row["ACS2020_SSB_FRTJ"] = _ssb_score(row["SSB_FRTJ_SERV_ACS2020"])

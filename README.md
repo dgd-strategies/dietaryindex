@@ -5,6 +5,8 @@ ___
 
 **dietaryindex** is an R package that provides user-friendly, streamlined methods for standardizing the compilation of dietary intake data into index-based dietary patterns to enable the assessment of adherence to these patterns in epidemiologic and clinical studies. It has been peer-reviewed and published in the **[American Journal of Clinical Nutrition](https://ajcn.nutrition.org/article/S0002-9165(24)00672-5/abstract)**.
 
+The original R package sources now live under the `r_pkg/` directory. A Python reimplementation is available separately under `python/`.
+
 ## User-friendly tutorial page
 ___
 ### We have created a modern, user-friendly tutorial page for the dietaryindex package. Check it out!
@@ -112,22 +114,22 @@ install_github("jamesjiadazhan/dietaryindex")
 ```
 
 ### Python usage
-A growing Python reimplementation is included alongside the R package. Install it in editable mode and import the scoring functions:
+A growing Python reimplementation is included alongside the R package under the `python/` directory. Install it in editable mode and import the scoring functions:
 
 ```bash
-pip install -e .
+pip install -e ./python
 ```
 
 ```python
 from dietaryindex_py import acs2020_v1, acs2020_v2, ahei
 ```
 
-A Python-focused development container is provided under the `.devcontainer` directory for a ready-to-use environment. The container installs required dependencies and the package itself in editable mode and includes `pytest` for testing. After opening the project inside the dev container you can run the tests directly with `pytest`.
+A Python-focused development container is provided under the `.devcontainer` directory for a ready-to-use environment. The container installs required dependencies and the package itself in editable mode and includes `pytest` for testing. After opening the project inside the dev container you can run the tests directly with `pytest`. The container installs the Python package via `pip install -r python/requirements.txt && pip install -e ./python`.
 
 To run the Python tests from a local checkout without installing the package, use:
 
 ```bash
-PYTHONPATH=. pytest -q
+PYTHONPATH=python pytest -q
 ```
 
 

@@ -4,12 +4,12 @@ from typing import Iterable, List, Dict, Any
 
 try:
     import pandas as pd
+
     HAVE_PANDAS = True
 except Exception:  # pragma: no cover - pandas may not be installed
     HAVE_PANDAS = False
 
 from .acs2020 import _quantiles, _score_value, _ssb_score, _apply_quintile
-
 
 
 def _acs2020_v2_rows(data: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -33,21 +33,53 @@ def _acs2020_v2_rows(data: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
             if c not in r:
                 raise KeyError(f"Missing required column: {c}")
 
-    _apply_quintile(rows, "GENDER", "VEG_SERV_ACS2020", "ACS2020_VEG", True, [0, 0.25, 0.5, 0.75])
-    _apply_quintile(rows, "GENDER", "VEG_ITEMS_SERV_ACS2020", "ACS2020_VEG_ITEMS", True, [0, 0.25, 0.5, 0.75])
-    _apply_quintile(rows, "GENDER", "FRT_SERV_ACS2020", "ACS2020_FRT", True, [0, 0.25, 0.5, 0.75])
-    _apply_quintile(rows, "GENDER", "FRT_ITEMS_SERV_ACS2020", "ACS2020_FRT_ITEMS", True, [0, 0.25, 0.5, 0.75])
-    _apply_quintile(rows, "GENDER", "WGRAIN_SERV_ACS2020", "ACS2020_WGRAIN", True, [0, 1, 2, 3])
-    _apply_quintile(rows, "GENDER", "REDPROC_MEAT_SERV_ACS2020", "ACS2020_REDPROC_MEAT", False, [3, 2, 1, 0])
+    _apply_quintile(
+        rows, "GENDER", "VEG_SERV_ACS2020", "ACS2020_VEG", True, [0, 0.25, 0.5, 0.75]
+    )
+    _apply_quintile(
+        rows,
+        "GENDER",
+        "VEG_ITEMS_SERV_ACS2020",
+        "ACS2020_VEG_ITEMS",
+        True,
+        [0, 0.25, 0.5, 0.75],
+    )
+    _apply_quintile(
+        rows, "GENDER", "FRT_SERV_ACS2020", "ACS2020_FRT", True, [0, 0.25, 0.5, 0.75]
+    )
+    _apply_quintile(
+        rows,
+        "GENDER",
+        "FRT_ITEMS_SERV_ACS2020",
+        "ACS2020_FRT_ITEMS",
+        True,
+        [0, 0.25, 0.5, 0.75],
+    )
+    _apply_quintile(
+        rows, "GENDER", "WGRAIN_SERV_ACS2020", "ACS2020_WGRAIN", True, [0, 1, 2, 3]
+    )
+    _apply_quintile(
+        rows,
+        "GENDER",
+        "REDPROC_MEAT_SERV_ACS2020",
+        "ACS2020_REDPROC_MEAT",
+        False,
+        [3, 2, 1, 0],
+    )
 
     groups: Dict[Any, List[int]] = {}
     for idx, row in enumerate(rows):
         groups.setdefault(row["GENDER"], []).append(idx)
     for indices in groups.values():
-        vals = [rows[i]["HPFRG_SERV_ACS2020"] / (rows[i]["TOTALKCAL_ACS2020"] / 1000) for i in indices]
+        vals = [
+            rows[i]["HPFRG_SERV_ACS2020"] / (rows[i]["TOTALKCAL_ACS2020"] / 1000)
+            for i in indices
+        ]
         q1, q2, q3 = _quantiles(vals)
         for idx, val in zip(indices, vals):
-            rows[idx]["ACS2020_HPFRG"] = float(_score_value(val, q1, q2, q3, False, [0, 0.5, 1.0, 1.5]))
+            rows[idx]["ACS2020_HPFRG"] = float(
+                _score_value(val, q1, q2, q3, False, [0, 0.5, 1.0, 1.5])
+            )
 
     for row in rows:
         row["ACS2020_SSB_FRTJ"] = _ssb_score(row["SSB_FRTJ_SERV_ACS2020"])

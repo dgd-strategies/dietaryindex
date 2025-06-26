@@ -4,18 +4,23 @@ from typing import Iterable, List, Dict, Any
 
 try:
     import pandas as pd
+
     HAVE_PANDAS = True
 except Exception:  # pragma: no cover - pandas may not be installed
     HAVE_PANDAS = False
 
 
-def _score_linear(val: float, min_serv: float, max_serv: float, min_score: float, max_score: float) -> float:
+def _score_linear(
+    val: float, min_serv: float, max_serv: float, min_score: float, max_score: float
+) -> float:
     """Linearly interpolate scores between ``min_serv`` and ``max_serv``."""
     if val >= max_serv:
         return max_score
     if val <= min_serv:
         return min_score
-    return min_score + (val - min_serv) * (max_score - min_score) / (max_serv - min_serv)
+    return min_score + (val - min_serv) * (max_score - min_score) / (
+        max_serv - min_serv
+    )
 
 
 def _quantiles_list(values: List[float], probs: List[float]) -> List[float]:
@@ -74,7 +79,9 @@ def _ahei_rows(data: Iterable[Dict[str, Any]]) -> List[Dict[str, Any]]:
         r["AHEI_N3FAT"] = _score_linear(r["N3FAT_SERV_AHEI"], 0, 250, 0, 10)
         r["AHEI_PUFA"] = _score_linear(r["PUFA_SERV_AHEI"], 2, 10, 0, 10)
         r["AHEI_SSB_FRTJ"] = _score_linear(r["SSB_FRTJ_SERV_AHEI"], 1, 0, 0, 10)
-        r["AHEI_REDPROC_MEAT"] = _score_linear(r["REDPROC_MEAT_SERV_AHEI"], 1.5, 0, 0, 10)
+        r["AHEI_REDPROC_MEAT"] = _score_linear(
+            r["REDPROC_MEAT_SERV_AHEI"], 1.5, 0, 0, 10
+        )
         r["AHEI_TRANS"] = _score_linear(r["TRANS_SERV_AHEI"], 4, 0.5, 0, 10)
 
         # sodium decile score

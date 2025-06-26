@@ -151,20 +151,22 @@ def test_missing_column_ahei():
 
 def test_dataframe_input_roundtrip():
     pd = pytest.importorskip("pandas")
-    df = pd.DataFrame([
-        {
-            "RESPONDENTID": 1,
-            "GENDER": 1,
-            "VEG_SERV_ACS2020": 1,
-            "VEG_ITEMS_SERV_ACS2020": 1,
-            "FRT_SERV_ACS2020": 1,
-            "FRT_ITEMS_SERV_ACS2020": 1,
-            "WGRAIN_SERV_ACS2020": 1,
-            "REDPROC_MEAT_SERV_ACS2020": 1,
-            "HPFRG_RATIO_SERV_ACS2020": 1,
-            "SSB_FRTJ_SERV_ACS2020": 0.5,
-        }
-    ])
+    df = pd.DataFrame(
+        [
+            {
+                "RESPONDENTID": 1,
+                "GENDER": 1,
+                "VEG_SERV_ACS2020": 1,
+                "VEG_ITEMS_SERV_ACS2020": 1,
+                "FRT_SERV_ACS2020": 1,
+                "FRT_ITEMS_SERV_ACS2020": 1,
+                "WGRAIN_SERV_ACS2020": 1,
+                "REDPROC_MEAT_SERV_ACS2020": 1,
+                "HPFRG_RATIO_SERV_ACS2020": 1,
+                "SSB_FRTJ_SERV_ACS2020": 0.5,
+            }
+        ]
+    )
     out_df = acs2020_v1(df)
     assert isinstance(out_df, pd.DataFrame)
     out_dict = acs2020_v1(df.to_dict("records"))[0]
