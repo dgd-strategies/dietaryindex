@@ -111,6 +111,22 @@ library(devtools) # Load devtools
 install_github("jamesjiadazhan/dietaryindex")
 ```
 
+### Python usage
+In addition to the original R package, a minimal Python reimplementation is
+included in this repository.  Install it in editable mode and import the
+``acs2020_v1`` function:
+
+```bash
+pip install -e .
+```
+
+```python
+from dietaryindex_py import acs2020_v1
+```
+
+Development containers with both R and Python are provided under the
+``.devcontainer`` directory for a ready-to-use environment.
+
 
 If something happens like the following, first try to enter 1 in the terminal (lower box). If not successful, then try to enter 2. **It will take a while if you are a new R user.**
 ```
