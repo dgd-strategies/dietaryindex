@@ -2,23 +2,16 @@ import pandas as pd
 
 
 def _quintile_scores(series: pd.Series, ascending: bool, scores: list) -> pd.Series:
-    """Assign quintile-based scores to a pandas Series."""
-    quantiles = series.quantile([0.25, 0.5, 0.75]).tolist()
-    q1, q2, q3 = quantiles
-    if ascending:
-        return pd.cut(
-            series,
-            bins=[-float('inf'), q1, q2, q3, float('inf')],
-            labels=scores,
-            include_lowest=True,
-        ).astype(float)
-    else:
-        return pd.cut(
-            series,
-            bins=[-float('inf'), q3, q2, q1, float('inf')],
-            labels=scores,
-            include_lowest=True,
-        ).astype(float)
+    """Assign quintile-based scores using ranking."""
+    ranks = series.rank(method="average", pct=True)
+    if not ascending:
+        ranks = 1 - ranks
+    return pd.cut(
+        ranks,
+        bins=[0, 0.25, 0.5, 0.75, 1.0],
+        labels=scores,
+        include_lowest=True,
+    ).astype(float)
 
 
 def acs2020_v1(df: pd.DataFrame) -> pd.DataFrame:
