@@ -124,8 +124,15 @@ pip install -e .
 from dietaryindex_py import acs2020_v1
 ```
 
-Development containers with both R and Python are provided under the
-``.devcontainer`` directory for a ready-to-use environment.
+Development container configuration is provided under the
+``.devcontainer`` directory.  The Codespaces image is based on Python 3.11
+and installs the packages listed in ``requirements.txt`` automatically via
+``postCreateCommand``.  After the container is ready, run ``pytest`` to
+execute the unit tests.
+
+The ``acs2020_v1`` function works with pandas if available, but when the
+``pandas`` package cannot be installed it also accepts a dictionary mapping
+column names to lists and returns a dictionary with score columns added.
 
 
 If something happens like the following, first try to enter 1 in the terminal (lower box). If not successful, then try to enter 2. **It will take a while if you are a new R user.**
@@ -170,4 +177,4 @@ FPED, NUTRIENT, and DEMO files are available within the package and in the anoth
 
 ### Contributing & Notes
 ___
-**dietaryindex** is licensed under the [MIT License](https://github.com/jamesjiadazhan/dietaryindex/blob/main/other/LICENSE.txt). Please check out the [Contribution guide](https://github.com/jamesjiadazhan/dietaryindex/blob/main/CONTRIBUTING.md) for questions, feature requests, and bug reports. The maintainer will review pull requests and incorporate contributions at his discretion. You may also reach out to the maintainer, **Jiada (James) Zhan**, via his email: jzha832@emory.edu. **Jiada (James) Zhan** home page at Emory is: https://www.sph.emory.edu/phd-students/profile/index.php?FID=jiada-zhan-12906. **Becky Hodge** at the American Cancer Society provided substantial contributions to validate this package. **Michael L Orr** at Dean Jones/ Young-Mi Go Lab at Emory University helped design the dietaryindex logo. Thanks a lot for their help.
+**dietaryindex** is licensed under the [MIT License](https://github.com/jamesjiadazhan/dietaryindex/blob/main/LICENSE). Please check out the [Contribution guide](https://github.com/jamesjiadazhan/dietaryindex/blob/main/CONTRIBUTING.md) for questions, feature requests, and bug reports. The maintainer will review pull requests and incorporate contributions at his discretion. You may also reach out to the maintainer, **Jiada (James) Zhan**, via his email: jzha832@emory.edu. **Jiada (James) Zhan** home page at Emory is: https://www.sph.emory.edu/phd-students/profile/index.php?FID=jiada-zhan-12906. **Becky Hodge** at the American Cancer Society provided substantial contributions to validate this package. **Michael L Orr** at Dean Jones/ Young-Mi Go Lab at Emory University helped design the dietaryindex logo. Thanks a lot for their help.

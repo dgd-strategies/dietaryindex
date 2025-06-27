@@ -1,7 +1,15 @@
-FROM rocker/r-ver:4.3.2
+# Base image with Python preinstalled and VS Code settings
+FROM mcr.microsoft.com/vscode/devcontainers/python:3.11
 
-RUN apt-get update && apt-get install -y python3 python3-pip && rm -rf /var/lib/apt/lists/*
-RUN R -e "install.packages(c('dplyr','readr','haven'))"
-RUN pip3 install pandas pytest
+# Install Git LFS which may be needed for large files
+RUN apt-get update && \
+    apt-get install -y git-lfs && \
+    git lfs install && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt /tmp/requirements.txt
+RUN pip install --no-cache-dir -r /tmp/requirements.txt
+
 WORKDIR /workspace/dietaryindex
+
 CMD ["bash"]

@@ -1,0 +1,15 @@
+notebook
+jupyter
+requests
+pandas
+numpy
+matplotlib
+scikit-learn
+statsmodels
+ipykernel
+seaborn
+xgboost
+pyreadr
+plotnine
+ace_tools
+pytest
