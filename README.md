@@ -3,7 +3,9 @@
 ## Overview
 ___
 
-**dietaryindex** is an R package that provides user-friendly, streamlined methods for standardizing the compilation of dietary intake data into index-based dietary patterns to enable the assessment of adherence to these patterns in epidemiologic and clinical studies. It has been peer-reviewed and published in the **[American Journal of Clinical Nutrition](https://ajcn.nutrition.org/article/S0002-9165(24)00672-5/abstract)**.
+**dietaryindex** is an R package that provides user-friendly, streamlined methods for standardizing the compilation of dietary intake data into index-based dietary patterns. It has been peer-reviewed and published in the **[American Journal of Clinical Nutrition](https://ajcn.nutrition.org/article/S0002-9165(24)00672-5/abstract)**.
+
+This repository is a modernization of the original work by **Jiada (James) Zhan** and colleagues available at [github.com/jamesjiadazhan/dietaryindex](https://github.com/jamesjiadazhan/dietaryindex). The University of Florida team is extending the project to provide a lightweight website and Python utilities for computing the Dietary Inflammatory Index (DII), MIND diet score, and Healthy Eating Index (HEI). Development of this fork leverages GitHub's **Codex** to assist with maintenance and automation. All original and new contributions remain under the MIT License.
 
 ## User-friendly tutorial page
 ___
@@ -19,6 +21,10 @@ If you are using the Dietaryindex package in your research, **please be sure to 
   - Zhe Xu. (2024) 'Improving the dietaryindex R Package: A Proposal to Include Additional Components for More Accurate DII Computation in NHANES', *The American Journal of Clinical Nutrition*. doi: 10.1016/j.ajcnut.2024.10.023.
 - **Biorxiv Preprint**:
   - Jiada James Zhan, Rebecca A Hodge, Anne Dunlop, et al. 'Dietaryindex: A User-Friendly and Versatile R Package for Standardizing Dietary Pattern Analysis in Epidemiological and Clinical Studies'. *bioRxiv*. Published online August 07, 2023:2023.08.07.548466. doi:10.1101/2023.08.07.548466
+
+If you make use of the additional Python modules or the web interface provided in this repository, please cite this fork as:
+
+Clark E, Zhan JJ. "Modernizing dietaryindex with Python utilities and a web-based interface". University of Florida, 2024. https://github.com/jamesjiadazhan/dietaryindex
 
 ## How dietaryindex works
 ___
@@ -112,16 +118,16 @@ install_github("jamesjiadazhan/dietaryindex")
 ```
 
 ### Python usage
-In addition to the original R package, a minimal Python reimplementation is
-included in this repository.  Install it in editable mode and import the
-``acs2020_v1`` function:
+In addition to the original R package, Python utilities are provided for quick
+calculations of several dietary indexes. Install the project in editable mode
+and import the helpers:
 
 ```bash
 pip install -e .
 ```
 
 ```python
-from dietaryindex_py import acs2020_v1
+from dietaryindex_py import acs2020_v1, dii_score, mind_score, hei_score
 ```
 
 Development containers with both R and Python are provided under the
@@ -166,7 +172,13 @@ For NHANES data:
 
 FPED, NUTRIENT, and DEMO files are available within the package and in the another GitHub repository and Google Drive collected by the package developer for your convenience
 - https://github.com/jamesjiadazhan/dietaryindex_manual
-- https://drive.google.com/drive/folders/1umjhuS22aHEW_bU5AjYa8vrae91gsb0D?usp=share_link 
+- https://drive.google.com/drive/folders/1umjhuS22aHEW_bU5AjYa8vrae91gsb0D?usp=share_link
+
+### Modernization & Website
+___
+This fork is maintained by researchers at the **University of Florida** (contact: edward.clark@ufl.edu). Our goal is to build an accessible web interface for calculating **DII**, **MIND**, and **HEI** scores directly in the browser. A preview is available at **index.html** in this repository and will be hosted via GitHub Pages.
+
+We are experimenting with GitHub's Codex to automate code maintenance. Feedback and contributions are welcome!
 
 ### Contributing & Notes
 ___
